@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { data } from "../data";
 import { CartContext } from "./CartContext";
 
@@ -9,12 +9,26 @@ export const MyContextProvider = ({ children }) => {
 
   const { cart, setCart } = useContext(CartContext);
 
+  function itemsToLocalStorage(state) {
+    localStorage.setItem("s10g4", JSON.stringify(state));
+  }
+  function readFavsFromLocalStorage() {
+    return JSON.parse(localStorage.getItem("s10g4"));
+  }
   const addItem = (item) => {
-    // verilen itemi sepete ekleyin
     const checkSameItem = cart.find((book) => book.id === item.id);
     if (checkSameItem) return;
-    setCart([...cart, item]);
+    const updatedCart = [...cart, item];
+
+    setCart(updatedCart);
+
+    itemsToLocalStorage(updatedCart);
   };
+
+  useEffect(() => {
+    const savedData = readFavsFromLocalStorage();
+    if (savedData) setCart(savedData);
+  }, []);
 
   return (
     <ProductContext.Provider value={{ addItem, products, setProducts }}>
