@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { data } from "../data";
 import { CartContext } from "./CartContext";
-
 export const ProductContext = createContext();
 
 export const MyContextProvider = ({ children }) => {
@@ -12,7 +11,7 @@ export const MyContextProvider = ({ children }) => {
   function itemsToLocalStorage(state) {
     localStorage.setItem("s10g4", JSON.stringify(state));
   }
-  function readFavsFromLocalStorage() {
+  function itemsFromLocalStorage() {
     return JSON.parse(localStorage.getItem("s10g4"));
   }
   const addItem = (item) => {
@@ -26,7 +25,7 @@ export const MyContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const savedData = readFavsFromLocalStorage();
+    const savedData = itemsFromLocalStorage();
     if (savedData) setCart(savedData);
   }, []);
 
